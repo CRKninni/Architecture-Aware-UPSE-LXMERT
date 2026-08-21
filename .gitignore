@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+*.pyo
+*.log
+nohup_*
+*.ckpt
+*.pth
+energy_*.json
+.DS_Store
