@@ -1,0 +1,75 @@
+{
+  "model": "LXMERT",
+  "method_locked": "upse_lxmert_v4",
+  "protocol": {
+    "benchmark": "VQA-v2 faithfulness (deletion/insertion curves)",
+    "n": 3303,
+    "seed": 42,
+    "drop_k_percent": 15.0,
+    "k_values_percent": [5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+    "sample_selection": "Shuffle all valid.json indices with seed 42; take first 3303",
+    "target_score": "Softmax confidence of argmax predicted answer class",
+    "perturbation": "Combined text+image: top-k% by attribution per modality; deletion removes non-top-k; insertion from empty/minimal input",
+    "documentation": "docs/EVALUATION_AOPC.md",
+    "metrics": {
+      "combined_aopc": "AOPC = mean_k (baseline_conf - del_conf(k)) on combined deletion curve (area OVER curve; higher better)",
+      "combined_drop_conf": "Deletion@15% = drop(k) at k=15",
+      "combined_increase_conf": "Insertion@15% = ins_conf(15) - empty_conf (higher better)"
+    }
+  },
+  "ours": {
+    "method": "upse_lxmert",
+    "combined_aopc": 0.5491,
+    "combined_drop_conf": 0.4247,
+    "combined_increase_conf": 0.2989
+  },
+  "baselines_chefer_methods": {
+    "Relevance Maps": {
+      "combined_aopc": 0.5445,
+      "combined_drop_conf": 0.4158,
+      "combined_increase_conf": 0.2747
+    },
+    "Transformer Attribution": {
+      "combined_aopc": 0.5423,
+      "combined_drop_conf": 0.4055,
+      "combined_increase_conf": 0.2659
+    },
+    "LRP": {
+      "combined_aopc": 0.5159,
+      "combined_drop_conf": 0.3562,
+      "combined_increase_conf": 0.2332
+    },
+    "Raw Attention": {
+      "combined_aopc": 0.4336,
+      "combined_drop_conf": 0.1966,
+      "combined_increase_conf": 0.1435
+    },
+    "Grad-CAM": {
+      "combined_aopc": 0.4239,
+      "combined_drop_conf": 0.2145,
+      "combined_increase_conf": 0.1653
+    },
+    "Rollout": {
+      "combined_aopc": 0.3510,
+      "combined_drop_conf": 0.0996,
+      "combined_increase_conf": 0.0684
+    },
+    "Deep Spectral Method": {
+      "combined_aopc": 0.4464,
+      "combined_drop_conf": 0.2600,
+      "combined_increase_conf": 0.1081
+    },
+    "DSM + Grad": {
+      "combined_aopc": 0.5349,
+      "combined_drop_conf": 0.3907,
+      "combined_increase_conf": 0.2899
+    },
+    "DSM + Grad + Attn": {
+      "combined_aopc": 0.5356,
+      "combined_drop_conf": 0.3988,
+      "combined_increase_conf": 0.2786
+    }
+  },
+  "notes": "UPSE measured on locked v4 attribution maps. Baselines re-run on the same AOPC harness (n=3303, seed 42). Values rounded to 4 decimals in paper tables.",
+  "reproduce_aopc": "From UPSE paper repo: python documentation/eval_aopc/eval_lxmert_upse_aopc.py --method upse_lxmert --num-samples 3303 --seed 42"
+}
